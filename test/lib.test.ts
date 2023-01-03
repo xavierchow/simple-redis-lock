@@ -34,4 +34,20 @@ describe('SimpleRedisLock', () => {
     const secondTry = await acquire(redis, resource, ttlInSec);
     expect(secondTry).toBe(true);
   });
+
+  it('should be able to release', async () => {
+    // input: redis? id of resource? the token?
+    // output: true/false?
+    /*
+    const ttlInSec = 1;
+    const resource = uuid();
+    const lock = await acquire(redis, resource, ttlInSec);
+    expect(lock).toHaveProperty('release');
+    if (lock) {
+      await lock.release();
+    }
+    const secondTry = await acquire(redis, resource, ttlInSec);
+    expect(secondTry).toHaveProperty('release');
+    */
+  });
 });
