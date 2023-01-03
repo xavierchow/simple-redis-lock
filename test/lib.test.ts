@@ -36,21 +36,13 @@ describe('SimpleRedisLock', () => {
   });
 
   it('should be able to release', async () => {
-    // input: redis? id of resource? the token?
-    // output: true/false?
-    // await release(redis, resource, token???)
+    const resource = uuid();
+    const lock = await acquire(redis, resource, 10);
+    expect(lock).toHaveProperty('release');
+    if (lock) {
+      await lock.release();
+    }
+    const secondTry = await acquire(redis, resource, 10);
+    expect(secondTry).toHaveProperty('release');
   });
 });
-
-/*
- * const t = setInterval(...)
- * clearInterval(t)
- *
- * const subscription = rxjs.subscribe(...)
- * subscription.unsubscribe(...)
- *
- * const disposer = doSth(...)
- * disposer.dispose(...)
- *
- *
- */
