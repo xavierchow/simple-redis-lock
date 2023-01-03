@@ -1,8 +1,18 @@
 import * as srl from '../src/index';
-// const { acquire } = srl;
+import { v4 as uuid } from 'uuid';
+import Redis from 'ioredis';
+const { acquire } = srl;
 
 describe('SimpleRedisLock', () => {
-  it.todo('should be able to acquire the lock');
-  // input: redis, the identifier of locked resource, ttl for auto-release
-  // output: lock result
+  const redis = new Redis();
+  afterAll(() => {
+    return redis.disconnect();
+  });
+
+  it('should be able to acquire the lock', async () => {
+    const ttlInSec = 10;
+    const resource = uuid();
+    const res = await acquire(redis, resource, ttlInSec);
+    expect(res).toBe(true);
+  });
 });
