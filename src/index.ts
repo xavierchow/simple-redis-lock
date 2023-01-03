@@ -18,4 +18,19 @@ export async function acquire(redis: Redis, resource: string, ttl: number) {
   };
 }
 
-async function release(redis: Redis, token: string, lockKey: string) {}
+async function release(redis: Redis, token: string, lockKey: string) {
+  const sha = await loadScript(redis);
+  const numOfKeys = 1;
+  return redis.evalsha(sha, numOfKeys, lockKey, token);
+}
+
+async function loadScript(redis: Redis) {
+  const script = `if redis.call("get",KEYS[1]) == ARGV[1]
+      then
+          return redis.call("del",KEYS[1])
+      else
+          return 0
+      end`;
+  const sha = await redis.script('LOAD', script);
+  return sha as string;
+}
