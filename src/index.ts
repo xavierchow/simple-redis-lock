@@ -10,7 +10,12 @@ export async function acquire(redis: Redis, resource: string, ttl: number) {
   const lockKey = `lock:${resource}`;
   const ack = await redis.set(lockKey, token, 'EX', ttl, 'NX');
 
-  return ack === 'OK';
+  if (ack !== 'OK') {
+    return;
+  }
+  return {
+    release: () => release.call(null, redis, token, lockKey),
+  };
 }
 
 async function release(redis: Redis, token: string, lockKey: string) {}

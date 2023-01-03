@@ -14,16 +14,16 @@ describe('SimpleRedisLock', () => {
     const ttlInSec = 10;
     const resource = uuid();
     const res = await acquire(redis, resource, ttlInSec);
-    expect(res).toBe(true);
+    expect(res).toHaveProperty('release');
   });
 
   it('should be able to prevent others to acquire the lock', async () => {
     const ttlInSec = 10;
     const resource = uuid();
     const res = await acquire(redis, resource, ttlInSec);
-    expect(res).toBe(true);
+    expect(res).toHaveProperty('release');
     const secondTry = await acquire(redis, resource, ttlInSec);
-    expect(secondTry).toBe(false);
+    expect(secondTry).toBeUndefined();
   });
 
   it('should be able to acquire after expiring', async () => {
@@ -32,7 +32,7 @@ describe('SimpleRedisLock', () => {
     await acquire(redis, resource, ttlInSec);
     await setTimeout(1500);
     const secondTry = await acquire(redis, resource, ttlInSec);
-    expect(secondTry).toBe(true);
+    expect(secondTry).toHaveProperty('release');
   });
 
   it('should be able to release', async () => {
