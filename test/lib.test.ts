@@ -49,13 +49,13 @@ describe('SimpleRedisLock', () => {
   it('should only load script once', async () => {
     const resource = uuid();
     const spy = jest.spyOn(redis, 'script');
-    const lock = await acquire(redis, resource, 1);
+    const lock = await acquire(redis, resource, 10);
 
     expect(lock).toHaveProperty('release');
     if (lock) {
       await lock.release();
     }
-    const lock2 = await acquire(redis, resource, 1);
+    const lock2 = await acquire(redis, resource, 10);
     expect(lock2).toHaveProperty('release');
     if (lock2) {
       await lock2.release();
@@ -65,15 +65,17 @@ describe('SimpleRedisLock', () => {
     spy.mockRestore();
   });
 
-  it.only('should be able to reload if script is flushed by redis', async () => {
-    const mock = jest.spyOn(redis, 'script').mockResolvedValue('non-existing-hash');
+  it('should be able to reload if script is flushed by redis', async () => {
+    const mock = jest.spyOn(redis, 'script').mockResolvedValueOnce('non-existing-hash');
     const resource = uuid();
-    const lock = await acquire(redis, resource, 1);
+    const lock = await acquire(redis, resource, 10);
 
     expect(lock).toHaveProperty('release');
-    if (lock) {
-      await lock.release();
+    if (!lock) {
+      throw new Error('failed to lock');
     }
+    const r = await lock.release();
+    expect(r).toBe(1);
     mock.mockRestore();
   });
 });
