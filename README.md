@@ -27,7 +27,7 @@ error and refreshes the sha when needed.
 ## Install
 
 ```sh
-$ npm install simple-redis-lock
+$ npm install @xavierchow/simple-redis-lock
 ```
 
 ## Usage
@@ -46,6 +46,17 @@ if (lock) {
     await lock.release();
   }
 }
+```
+
+## development
+
+```sh
+# start redis with docker
+$ ./dockers.sh
+
+# run the test
+$ npm test
+
 ```
 
 ## License
