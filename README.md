@@ -5,8 +5,8 @@ It **does not** aim to have a fault tolerant solution like [redlock](https://red
 
 ## Motivation
 
-This library was built to throttle the redundant queries for a cache mechanism, the fault tolerance is not a matter because the worst case of losing
-the lock is just bringing some extra operations.
+This library was built to throttle the redundant queries from original server for a cache mechanism, the fault tolerance is not a matter because the worst case of losing
+the lock is just bringing some extra queries.
 
 It provides deadlock prevention with an auto-release mechanism, and handles releasing conflicts with a lua script.
 There are only two interfaces(or public functions) for this module.
@@ -14,7 +14,7 @@ There are only two interfaces(or public functions) for this module.
 - acquire
 - release
 
-The main flow can be found as follows,
+The main flow can be depicted as follows,
 ![flow](images/flow.png)
 
 ### Eval vs EvalSha
@@ -26,11 +26,27 @@ error and refreshes the sha when needed.
 
 ## Install
 
-T.B.D
+```sh
+$ npm install simple-redis-lock
+```
 
 ## Usage
 
-T.B.D
+```javascript
+import Redis from 'ioredis';
+import { acquire } from 'simple-redis-lock';
+
+const redis = new Redis();
+const ttlInSec = 10;
+const lock = await acquire(redis, resource, ttlInSec);
+if (lock) {
+  try {
+    // some processing here
+  } finally {
+    await lock.release();
+  }
+}
+```
 
 ## License
 
