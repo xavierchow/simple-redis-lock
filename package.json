@@ -1,6 +1,6 @@
 {
   "name": "@xavierchow/simple-redis-lock",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple lock with Redis implemented with the pattern: https://redis.io/commands/set/. It **does not** aim to have a fault tolerant solution like [redlock](https://redis.com/redis-best-practices/communication-patterns/redlock/).",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,13 +12,19 @@
     "type": "git",
     "url": "git+https://github.com/xavierchow/simple-redis-lock.git"
   },
-  "keywords": ["redis", "lock"],
+  "keywords": [
+    "redis",
+    "lock"
+  ],
   "author": "xavierchow",
   "license": "MIT",
   "publishConfig": {
     "access": "public"
   },
-  "files": ["dist", "!dist/tsconfig.tsbuildinfo"],
+  "files": [
+    "dist",
+    "!dist/tsconfig.tsbuildinfo"
+  ],
   "bugs": {
     "url": "https://github.com/xavierchow/simple-redis-lock/issues"
   },
