@@ -34,7 +34,7 @@ $ npm install @xavierchow/simple-redis-lock
 
 ```javascript
 import Redis from 'ioredis';
-import { acquire } from 'simple-redis-lock';
+import { acquire } from '@xavierchow/simple-redis-lock';
 
 const redis = new Redis();
 const ttlInSec = 10;
