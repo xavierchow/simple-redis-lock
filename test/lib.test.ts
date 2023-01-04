@@ -64,4 +64,6 @@ describe('SimpleRedisLock', () => {
 
     spy.mockRestore();
   });
+
+  it.todo('should be able to reload if script is flushed by redis');
 });

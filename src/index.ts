@@ -4,7 +4,7 @@ import { v4 as uuid } from 'uuid';
  * A simple lock with redis implementing the pattern: https://redis.io/commands/set/
  * It does not aim to have a fault tolerant solution like redlock as we do not have such use case.
  * */
-
+let sha: string;
 export async function acquire(redis: Redis, resource: string, ttl: number) {
   const token = uuid();
   const lockKey = `lock:${resource}`;
@@ -19,7 +19,9 @@ export async function acquire(redis: Redis, resource: string, ttl: number) {
 }
 
 async function release(redis: Redis, token: string, lockKey: string) {
-  const sha = await loadScript(redis);
+  if (!sha) {
+    sha = await loadScript(redis);
+  }
   const numOfKeys = 1;
   return redis.evalsha(sha, numOfKeys, lockKey, token);
 }
