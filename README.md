@@ -48,7 +48,7 @@ if (lock) {
 }
 ```
 
-## development
+## Development
 
 ```sh
 # start redis with docker
