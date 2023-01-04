@@ -45,4 +45,23 @@ describe('SimpleRedisLock', () => {
     const secondTry = await acquire(redis, resource, 10);
     expect(secondTry).toHaveProperty('release');
   });
+
+  it('should only load script once', async () => {
+    const resource = uuid();
+    const spy = jest.spyOn(redis, 'script');
+    const lock = await acquire(redis, resource, 1);
+
+    expect(lock).toHaveProperty('release');
+    if (lock) {
+      await lock.release();
+    }
+    const lock2 = await acquire(redis, resource, 1);
+    expect(lock2).toHaveProperty('release');
+    if (lock2) {
+      await lock2.release();
+    }
+    expect(spy.mock.calls.length).toBeLessThan(2);
+
+    spy.mockRestore();
+  });
 });
