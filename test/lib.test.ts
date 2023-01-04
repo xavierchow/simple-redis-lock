@@ -65,5 +65,15 @@ describe('SimpleRedisLock', () => {
     spy.mockRestore();
   });
 
-  it.todo('should be able to reload if script is flushed by redis');
+  it.only('should be able to reload if script is flushed by redis', async () => {
+    const mock = jest.spyOn(redis, 'script').mockResolvedValue('non-existing-hash');
+    const resource = uuid();
+    const lock = await acquire(redis, resource, 1);
+
+    expect(lock).toHaveProperty('release');
+    if (lock) {
+      await lock.release();
+    }
+    mock.mockRestore();
+  });
 });
